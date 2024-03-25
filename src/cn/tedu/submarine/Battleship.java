@@ -8,11 +8,12 @@ public class Battleship extends SeaObject {
 
    private int life;
 
+
     public Battleship() {  //构造方法，与类同名，构造的目的是给实例变量赋值，
         super(66,26,270,124,10);
 
         life = 5;
-    }
+     }
 
     public void move()   {
               }
@@ -37,6 +38,15 @@ public class Battleship extends SeaObject {
         return new Bomb(this.x, this.y );
    }
 
+
+//战舰增命
+   public void addlife(int num) {
+        life += num;
+//       System.out.println(life);
+   }
+   public int getLife() {
+        return life;
+   }
 }
 
 

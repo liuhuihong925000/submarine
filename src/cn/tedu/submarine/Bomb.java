@@ -23,5 +23,6 @@ public class Bomb extends SeaObject {
     public boolean isOutOfBounds() {
         return this.y>= World.HEIGHT; //若潜艇动x>=窗口的宽，表示越界
     }
+
 }
 

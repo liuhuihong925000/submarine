@@ -24,4 +24,8 @@ public class MineSubmarine extends SeaObject implements EnemyLife{
     public int getLife() {
         return 1;  //打掉水雷艇，战舰得1条命。
     }
+
+//    public int getScore() {
+//        return 20;
+//    }
 }

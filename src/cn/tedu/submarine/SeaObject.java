@@ -77,6 +77,27 @@ public abstract class SeaObject { //抽象类，不能直接new对象，必须�
    public boolean isOutOfBounds() {  //检测海洋对象越界
         return this.x>= World.WIDTH; //若潜艇动x>=窗口的宽，表示越界
         }
+
+   public boolean isHit(SeaObject other) {
+        //this 指代 潜艇； other 指代 炸弹
+        int x1 = this.x - other.width;
+        int x2 = this.x + this. width;
+        int y1 = this.y - other.height;
+        int y2 = this.y + this.height;
+        int x = other.x;  // x: 炸弹的x
+        int y = other.y;  //  y: 炸弹的y
+        return x>=x1 && x<=x2
+                &&
+                y>=y1 && y<=y2;
+   }
+
+   public void goDead() {
+        state = Dead;   //当前状态修改为Dead
+   }
+
+   public int getScore(){
+        return 0;
+   };
 }
 
 
