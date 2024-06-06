@@ -29,7 +29,7 @@ public abstract class SeaObject { //抽象类，不能直接new对象，必须�
         this.width = width;    //局部变量
         this.height = height;
         x = -width;
-        Random rand = new Random();
+        Random rand = new Random();    //Random是一个类，new了一个对象，对象打点去调用
         y = rand.nextInt(World.HEIGHT-height-150+1)+150;  // 取值 150～ 窗口高- 潜艇高
         speed = rand.nextInt(3)+1; //1～3之间的随机数
     }

@@ -44,9 +44,16 @@ public class Battleship extends SeaObject {
         life += num;
 //       System.out.println(life);
    }
+
+//   战舰减命
+    public void minusLife() {
+        life --;
+    }
    public int getLife() {
         return life;
    }
+
+
 }
 
 

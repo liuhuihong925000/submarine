@@ -2,7 +2,6 @@ package cn.tedu.submarine;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.*;
-import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Timer;
@@ -83,7 +82,8 @@ public class World  extends JPanel {
     }
 
 
-    //删除所有越界海洋对象
+    //删除所有越界海洋对象-- 避免内存泄漏
+
     private void OutofBoundsAction() { //被检测中，每10ms扫描一次
         for (int i = 0; i <= submarines.length - 1; i++) {  //遍历所有潜艇对象
             if (submarines[i].isOutOfBounds() || submarines[i].isDead()) {    //i元素，越界了
@@ -96,6 +96,7 @@ public class World  extends JPanel {
             if (mines[i].isOutOfBounds() || mines[i].isDead()) {
                 mines[i] = mines[mines.length - 1];
                 mines = Arrays.copyOf(mines, mines.length - 1);
+
             }
         }
 
@@ -103,6 +104,7 @@ public class World  extends JPanel {
             if (bombs[i].isOutOfBounds() || bombs[i].isDead()) {
                 bombs[i] = bombs[bombs.length - 1];
                 bombs = Arrays.copyOf(bombs, bombs.length - 1);
+
             }
         }
     }
@@ -110,8 +112,6 @@ public class World  extends JPanel {
     //炸弹与潜艇的碰撞
     private int score=0; // 玩家得分
     private void bombBangAction() {  //每10ms走一次
-
-
         for (int i = 0; i <= bombs.length - 1; i++) {
             Bomb b = bombs[i]; // 获取每一个炸弹
             for (int j = 0; j <= submarines.length - 1; j++) {
@@ -121,22 +121,37 @@ public class World  extends JPanel {
                     b.goDead();
 
                     score += submarines[j].getScore();;
-
 //                    System.out.println(score);
-
-                   if(s instanceof EnemyLife) {  //接口增命的写法
+                    if(s instanceof EnemyLife) {  //接口增命的写法
                        EnemyLife el = (EnemyLife)s;
                        int num = el.getLife();
                        ship.addlife(num);
 //                       System.out.println(Battleship.getLife);
 
-                }
-
-
+                    }
                 }
             }
         }
+    }
 
+    private void mineBangAction() {
+
+            for (int i=0; i<= mines.length-1; i++) {
+                Mine m = mines[i];
+                if (m.isLive() && ship.isLive() && ship.isHit(m)) {
+                    m.goDead();
+                    ship.minusLife(); // 战舰 减命
+
+                }
+            }
+    }
+
+    private void checkGameOverAction() {
+        if (ship.getLife()<=0){ //如果战舰命数<=0, 游戏结束
+              ship.goDead();
+//            paintGameOver();
+
+        }
     }
 
     private void action() {
@@ -175,6 +190,8 @@ public class World  extends JPanel {
                 OutofBoundsAction();//删除越界的海洋对象
 
                 bombBangAction();    //  炸弹与潜艇碰撞
+                mineBangAction();    //  水雷与战舰碰撞
+                checkGameOverAction(); //检测游戏结束
                 repaint(); // 超类中有个repaint()方法，10       ms页面重载
             }
         }, interval, interval);  //定时计划表
@@ -203,9 +220,19 @@ public class World  extends JPanel {
         for (int i = 0; i <= bombs.length - 1; i++) {   //遍历所有炸弹
             bombs[i].paintImage(g);        //画炸弹
         }
-        g.drawString("SCORE:" + score, 200, 50);
-        g.drawString("LIFE"+ ship.getLife(), 400, 50);
+        g.drawString("SCORE: " + score, 200, 50);
+        g.drawString("LIFE: "+ ship.getLife(), 400, 50);
+
+        if(ship.getLife()<=0) {
+            Images.gameover.paintIcon(null, g, 0, 0);
+        }
     }
+
+
+
+
+
+
 
 //    方法里面都是局部的
 
